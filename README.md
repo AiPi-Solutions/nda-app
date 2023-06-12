@@ -1,8 +1,10 @@
 ## DO THIS BEFORE ANYTHING
-run this, this will download all of the dependencies you need
+This will download all of the dependencies you need
 ```bash
 npm install
 ```
+Remember to do a git pull as well as you are working on the project
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started

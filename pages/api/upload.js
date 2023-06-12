@@ -1,6 +1,40 @@
 const formidable = require('formidable');
 const fs = require('fs');
 const mammoth = require('mammoth');
+const { Configuration, OpenAIApi } = require("openai");
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(configuration);
+
+async function runThroughModel(section, index) {
+  return new Promise(async (resolve, reject) => {
+    setTimeout(async () => {
+      let keysinobj = Object.keys(section);
+      if (section == '') {
+        resolve({
+          processed: ''
+        });
+      } else if (keysinobj.length < 20) {
+        resolve({
+          processed: section
+        });
+      } else { //currently working on this - DONT CALL API TOO MUCH
+        /*const response = await openai.createCompletion({
+          model: "text-davinci-003",
+          prompt: "Say this is a test",
+          temperature: 0,
+          max_tokens: 7,
+        });
+        let content = response.choices[0].message.content;*/
+        resolve({
+          processed: section//content
+        });
+      }
+    }, 100);
+  });
+}
+
 
 export const config = {
   api: {
@@ -15,8 +49,6 @@ export default async function handler(req, res) {
 
       const { fields, files } = await new Promise((resolve, reject) => {
         form.parse(req, (err, fields, files) => {
-          console.log("🚀 ~ file: upload.js:18 ~ form.parse ~ files:", files)
-          
           if (err) reject(err);
           resolve({ fields, files });
         });
@@ -28,20 +60,26 @@ export default async function handler(req, res) {
       }
 
       const filePath = files.file.filepath;
-      console.log("🚀 ~ file: upload.js:29 ~ handler ~ filePath:", filePath)
-      
-      console.log(filePath);
+
       mammoth.extractRawText({ path: filePath })
-        .then(result => {
-          const text = result.value; // The raw text
-          console.log("splitting text into sections...");
-          const sections = text.split('\n'); // Split the text into sections
+        .then(async result => {
+          const text = result.value;
+          const sections = text.split('\n');
+          //console.log("🚀 ~ file: upload.js:50 ~ handler ~ sections:", sections)
 
-          console.log(sections); // print the sections to the console
+          // Run each section through the model
+          let processedSections = [];
+          for (let i = 0; i < sections.length; i++) {
+            const processedSection = await runThroughModel(sections[i], i);
+            processedSections.push(processedSection);
+            //console.log("🚀 ~ file: upload.js:61 ~ handler ~ processedSection:", processedSection)
 
-          fs.unlinkSync(filePath); // delete the file after processing
+          }
+          console.log("done");
 
-          res.status(200).json(sections); // send the sections in the response
+          fs.unlinkSync(filePath);
+
+          res.status(200).json(processedSections);
         })
         .catch(error => {
           console.error('An error occurred:', error);
