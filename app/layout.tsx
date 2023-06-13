@@ -24,7 +24,9 @@ export default function RootLayout({
         </header>
 
         <main>
+        
           {children}
+         
         </main>
 
         <footer className="bg-gray-800 text-white p-4 z-10">

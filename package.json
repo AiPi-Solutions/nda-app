@@ -13,19 +13,33 @@
     "@types/react": "18.2.9",
     "@types/react-dom": "18.2.4",
     "autoprefixer": "^10.4.14",
+    "axios": "^1.4.0",
+    "docx": "^8.0.4",
+    "docxtemplater": "^3.37.11",
     "eslint": "8.42.0",
     "eslint-config-next": "13.4.4",
+    "file-saver": "^2.0.5",
     "formidable": "^2.1.1",
+    "gpt-3-encoder": "^1.1.4",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.5.29",
+    "jszip": "^3.10.1",
+    "mammoth": "^1.6.0",
     "next": "13.4.4",
     "openai": "^3.2.1",
+    "pizzip": "^3.1.4",
     "postcss": "^8.4.24",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-modal": "^3.16.1",
+    "react-spinners": "^0.13.8",
     "react-use-downloader": "^1.2.4",
     "tailwindcss": "3.3.2",
     "typescript": "5.1.3"
   },
   "devDependencies": {
-    "@types/formidable": "^2.0.6"
+    "@types/file-saver": "^2.0.5",
+    "@types/formidable": "^2.0.6",
+    "@types/react-modal": "^3.16.0"
   }
 }

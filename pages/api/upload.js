@@ -2,36 +2,41 @@ const formidable = require('formidable');
 const fs = require('fs');
 const mammoth = require('mammoth');
 const { Configuration, OpenAIApi } = require("openai");
+//const {encode, decode} = require('gpt-3-encoder')
+
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
 
-async function runThroughModel(section, index) {
-  return new Promise(async (resolve, reject) => {
-    setTimeout(async () => {
-      let keysinobj = Object.keys(section);
-      if (section == '') {
-        resolve({
-          processed: ''
-        });
-      } else if (keysinobj.length < 20) {
-        resolve({
-          processed: section
-        });
-      } else { //currently working on this - DONT CALL API TOO MUCH
-        /*const response = await openai.createCompletion({
-          model: "text-davinci-003",
-          prompt: "Say this is a test",
-          temperature: 0,
-          max_tokens: 7,
-        });
-        let content = response.choices[0].message.content;*/
-        resolve({
-          processed: section//content
-        });
-      }
-    }, 100);
+async function runThroughModel(section) {
+
+  return new Promise(async (resolve) => {
+    // setTimeout(() => {
+    let keysinobj = Object.keys(section);
+    if (keysinobj.length < 40) {
+      resolve({
+        processed: section
+      });
+    } else { //DONT CALL API TOO MUCH
+      section += "\n\n###->";
+
+      const response = await openai.createCompletion({
+        model: "davinci:ft-aipi-solutions-2023-05-29-19-30-48",
+        prompt: section,
+        max_tokens: 500,
+        temperature: .8,
+        top_p: 1,
+        stop: ['###-›', '\n\n###->', '\n###->', '###']
+      });
+      let content = response.data.choices[0].text;
+      console.log("🚀 ~ file: upload.js:37 ~ returnnewPromise ~ content:", content)
+
+      resolve({
+        processed: content
+      });
+    }
+    //}, 100);
   });
 }
 
@@ -64,15 +69,15 @@ export default async function handler(req, res) {
       mammoth.extractRawText({ path: filePath })
         .then(async result => {
           const text = result.value;
-          const sections = text.split('\n');
+          const sections = text.split('\n')/*.filter(section => section.trim() !== '')*/;
           //console.log("🚀 ~ file: upload.js:50 ~ handler ~ sections:", sections)
 
           // Run each section through the model
           let processedSections = [];
           for (let i = 0; i < sections.length; i++) {
-            const processedSection = await runThroughModel(sections[i], i);
+            const processedSection = await runThroughModel(sections[i]);
             processedSections.push(processedSection);
-            //console.log("🚀 ~ file: upload.js:61 ~ handler ~ processedSection:", processedSection)
+            //console.log("🚀 ~ file: upload.js:61 ~ handler ~ processedSection:", processedSection);
 
           }
           console.log("done");
