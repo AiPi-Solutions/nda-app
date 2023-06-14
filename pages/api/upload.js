@@ -19,7 +19,7 @@ async function runThroughModel(section) {
         processed: section
       });
     } else { //DONT CALL API TOO MUCH
-      section += "\n\n###->";
+      section += "END";
 
       const response = await openai.createCompletion({
         model: "davinci:ft-aipi-solutions-2023-05-29-19-30-48",
@@ -27,7 +27,7 @@ async function runThroughModel(section) {
         max_tokens: 500,
         temperature: .8,
         top_p: 1,
-        stop: ['###-›', '\n\n###->', '\n###->', '###']
+        stop: ['END', '\nEND']
       });
       let content = response.data.choices[0].text;
       console.log("🚀 ~ file: upload.js:37 ~ returnnewPromise ~ content:", content)

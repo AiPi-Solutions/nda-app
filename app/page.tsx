@@ -1,9 +1,9 @@
 "use client"
 import type { NextPage } from "next";
-import { ChangeEvent, MouseEvent, useState, Suspense } from "react";
+import { ChangeEvent, MouseEvent, useState } from "react";
 import { ClipLoader } from "react-spinners";
 import ReactModal from 'react-modal';
-import { Document, Packer, Paragraph, TextRun } from "docx";
+import { Document, Packer, Paragraph } from "docx";
 
 
 const UploadPage: NextPage = () => {
@@ -178,7 +178,6 @@ const UploadPage: NextPage = () => {
             </div>
           </form>
         </div>
-
       </div>
     </div>
 
