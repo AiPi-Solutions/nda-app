@@ -1,28 +1,41 @@
-"use client"
+"use client";
 import type { NextPage } from "next";
 import { ChangeEvent, MouseEvent, useState } from "react";
-import { ClipLoader } from "react-spinners";
-import ReactModal from 'react-modal';
 import { Document, Packer, Paragraph } from "docx";
 
+import LoadingModal from "../components/LoadingModal";
 
 const UploadPage: NextPage = () => {
   const [file, setFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isDownloadReady, setisDownloadReady] = useState(false);
   const [processedData, setProcessedData] = useState<any[]>([]);
-  const [originalFileName, setOriginalFileName] = useState<string>('');
-
+  const [originalFileName, setOriginalFileName] = useState<string>("");
+  const [fileName, setFileName] = useState<string | null>(null);
 
   const onFileUploadChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length) {
       setFile(e.target.files[0]);
+      setFileName(e.target.files[0].name);
+    } else {
+      setFile(null);
+      setFileName(null);
     }
   };
 
   const onCancelFile = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setFile(null);
+    setFileName(null);
+    setisDownloadReady(false);
+
+    // Clear the file input element
+    const fileInput = document.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = "";
+    }
   };
 
   const onUploadFile = async (e: MouseEvent<HTMLButtonElement>) => {
@@ -34,18 +47,17 @@ const UploadPage: NextPage = () => {
     setOriginalFileName(file.name);
     setIsLoading(true); // start loading
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append("file", file);
 
     try {
-      const response = await fetch('/api/upload', {
-        method: 'POST',
+      const response = await fetch("/api/upload", {
+        method: "POST",
         body: formData,
       });
 
       if (!response.ok) {
         throw new Error(`File upload failed with status ${response.status}`);
       }
-
 
       const data = await response.json();
       //console.log("🚀 ~ file: page.tsx:47 ~ onUploadFile ~ data:", data)
@@ -65,13 +77,17 @@ const UploadPage: NextPage = () => {
     setIsLoading(true);
 
     // Create a new paragraph for each processed section
-    const paragraphs = processedData.map((section) => new Paragraph(section.processed));
+    const paragraphs = processedData.map(
+      (section) => new Paragraph(section.processed)
+    );
 
     // Create a single section with all paragraphs
-    const sections = [{
-      properties: {},
-      children: paragraphs,
-    }];
+    const sections = [
+      {
+        properties: {},
+        children: paragraphs,
+      },
+    ];
 
     const doc = new Document({ sections });
 
@@ -83,7 +99,7 @@ const UploadPage: NextPage = () => {
     const url = URL.createObjectURL(blob);
 
     // Create a link element
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
     setIsLoading(false);
     // Set the download attribute to automatically download the .docx file
@@ -99,38 +115,11 @@ const UploadPage: NextPage = () => {
     document.body.removeChild(link);
   };
 
-
-
-
-
   return (
-
-
     <div className="flex items-center justify-center h-screen">
-      <ReactModal
-        isOpen={isLoading}
-        contentLabel="Loading Modal"
-        style={{
-          overlay: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          },
-          content: {
-            position: 'relative',
-            top: 'auto',
-            left: 'auto',
-            right: 'auto',
-            bottom: 'auto',
-          },
-        }}
-      >
-        <ClipLoader color="#123abc" loading={isLoading} size={150} />
-      </ReactModal>
+      <LoadingModal isLoading={isLoading} />
       <div className="relative py-3 w-6/12 sm:mx-auto bg-white shadow rounded-3xl sm:p-10">
-
         <div className="flex flex-col justify-between p-4">
-
           <h1 className="mb-10 text-3xl font-bold text-gray-900">
             Upload your NDA
           </h1>
@@ -142,7 +131,9 @@ const UploadPage: NextPage = () => {
           >
             <div className="flex flex-col md:py-4">
               <label className="flex flex-col items-center justify-center flex-grow h-full py-3 text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-2 ">
-                <strong className="text-sm font-medium">Select a file</strong>
+                <strong className="text-sm font-medium">
+                  {fileName || "Select a file"}
+                </strong>
                 <input
                   className="hidden"
                   name="file"
@@ -180,9 +171,6 @@ const UploadPage: NextPage = () => {
         </div>
       </div>
     </div>
-
-
-
   );
 };
 
