@@ -3,10 +3,7 @@ import { Inter } from 'next/font/google'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export const metadata = {
-  title: 'NDA AI - AIPI Solutions',
-  description: 'Modify your NDA with expert AI',
-}
+
 
 export default function RootLayout({
   children,

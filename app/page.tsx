@@ -1,7 +1,8 @@
 "use client";
 import type { NextPage } from "next";
-import { ChangeEvent, MouseEvent, useState } from "react";
+import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import { Document, Packer, Paragraph } from "docx";
+import Link from 'next/link';
 
 import LoadingModal from "../components/LoadingModal";
 
@@ -12,6 +13,15 @@ const UploadPage: NextPage = () => {
   const [processedData, setProcessedData] = useState<any[]>([]);
   const [originalFileName, setOriginalFileName] = useState<string>("");
   const [fileName, setFileName] = useState<string | null>(null);
+
+  useEffect(() => {
+    setFile(null);
+    setIsLoading(false);
+    setisDownloadReady(false);
+    setProcessedData([]);
+    setOriginalFileName("");
+    setFileName(null);
+  }, []);
 
   const onFileUploadChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length) {
@@ -167,8 +177,10 @@ const UploadPage: NextPage = () => {
                 </button>
               </div>
             </div>
+            
           </form>
         </div>
+        <h2 className="text-center text-gray-500 text-xs"><Link href="../manual">Manual Entry Version here</Link></h2>
       </div>
     </div>
   );
