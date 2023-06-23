@@ -11,7 +11,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <header className="bg-gray-800 text-white p-4 fixed w-full z-10">
+        <header className="bg-gray-800 text-white p-4 relative w-full z-10">
           <div className="container mx-auto flex items-center">
           <img src="aipiSolutions.png" alt="Company Logo" className="h-8 w-auto mr-5" />
             <h1 className="font-bold text-xl">NDA Editor - AIPI Solutions</h1>
@@ -24,11 +24,11 @@ export default function RootLayout({
          
         </main>
 
-        <footer className="bg-gray-800 text-white p-4 z-10">
-          <div className="container mx-auto">
+         {/* <footer className="bg-gray-800 text-white p-4 relative">
+          <div className="container  mx-auto ">
             <p>&copy; {new Date().getFullYear()} AIPI Solutions. All rights reserved.</p>
           </div>
-        </footer>
+        </footer>  */}
       </body>
     </html>
   )

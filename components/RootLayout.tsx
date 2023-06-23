@@ -21,11 +21,11 @@ export default function RootLayout({
         {children}
       </main>
 
-      <footer className="bg-gray-800 text-white p-4 z-10">
+      {/* <footer className="bg-gray-800 text-white p-4 z-10">
         <div className="container mx-auto">
           <p>&copy; {new Date().getFullYear()} AIPI Solutions. All rights reserved.</p>
         </div>
-      </footer>
+      </footer> */}
     </div>
   )
 }

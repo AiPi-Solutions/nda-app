@@ -14,12 +14,12 @@ async function runThroughModel(section) {
   return new Promise(async (resolve) => {
     // setTimeout(() => {
     let keysinobj = Object.keys(section);
-    if (keysinobj.length < 40) {
+    if (keysinobj.length < 90) {
       resolve({
         processed: section
       });
     } else { //DONT CALL API TOO MUCH
-      /*section += "END";
+      /*section += "\n\n###->";
 
       const response = await openai.createCompletion({
         model: "davinci:ft-aipi-solutions-2023-05-29-19-30-48",
@@ -27,10 +27,10 @@ async function runThroughModel(section) {
         max_tokens: 500,
         temperature: .8,
         top_p: 1,
-        stop: ['END', '\nEND']
+        stop: ['###-›', '\n\n###->', '\n###->', '###']
       });
       let content = response.data.choices[0].text;
-      console.log("🚀 ~ file: upload.js:37 ~ returnnewPromise ~ content:", content)*/
+      console.log("🚀 ~ file: upload.js:37 ~ returnnewPromise ~ content:", content);*/
 
       resolve({
         processed: section//content
