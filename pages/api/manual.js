@@ -8,11 +8,7 @@ const openai = new OpenAIApi(configuration);
 async function runThroughModel(section) {
   return new Promise(async (resolve) => {
     let keysinobj = Object.keys(section);
-    if(section == "") {
-        resolve({
-            processed: "\n"
-        });
-    } else if (keysinobj.length < 90) {
+     if (keysinobj.length < 90) {
       resolve({
         processed: section
       });
