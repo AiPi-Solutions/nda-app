@@ -5,7 +5,8 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-async function runThroughModel(section) {
+async function runThroughModel(section, model) {
+  console.log(model);
   return new Promise(async (resolve) => {
     let keysinobj = Object.keys(section);
      if (keysinobj.length < 90) {
@@ -34,16 +35,20 @@ async function runThroughModel(section) {
 }
 
 export default async function handler(req, res) {
+  // console.log("hi??");
+
   if (req.method === 'POST') {
     try {
-      const { text } = req.body;
+      const { text, model } = req.body;
+      console.log("WHY ARE THESE CONSOLE LOGS NOT SHOWING UP? (only on terminal, not localhost inspect element).");
+      // console.log(model);
 
       const sections = text.split('\n');
 
       // Run each section through the model
       let processedSections = [];
-      for (let i = 0; i < sections.length; i++) {
-        const processedSection = await runThroughModel(sections[i]);
+      for (let i = 0; i < sections.length; i++) { //, model_name
+        const processedSection = await runThroughModel(sections[i], model);
         processedSections.push(processedSection);
       }
       console.log("done");
