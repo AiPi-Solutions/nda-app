@@ -85,7 +85,7 @@ const UploadPage: NextPage = () => {
     }
   };
 
-  const onDownloadFile = async (e: MouseEvent<HTMLButtonElement>) => {
+  /*const onDownloadFile = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setIsLoading(true);
     
@@ -131,7 +131,7 @@ const UploadPage: NextPage = () => {
 
     // Remove the link from the body
     document.body.removeChild(link); 
-  }; 
+  }; */
   /*const onDownloadFile = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setIsLoading(true);
@@ -202,7 +202,7 @@ const UploadPage: NextPage = () => {
     // Remove the link from the body
     document.body.removeChild(link);  
   };*/
-  /*const onDownloadFile = async (e: MouseEvent<HTMLButtonElement>) => {
+  const onDownloadFile = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setIsLoading(true);
   
@@ -233,9 +233,6 @@ const UploadPage: NextPage = () => {
     }
     console.log("🚀 ~ file: upload.tsx:227 ~ onDownloadFile ~ file:", file);
     
-    setIsLoading(false);
-
-    
      // Append the original and modified files to the FormData instance
     formData.append('file1', file); // original file
     formData.append('file2', new File([blob], `${originalFileName.split('.').slice(0, -1).join('.')}-modified.docx`)); // modified file
@@ -264,7 +261,7 @@ const UploadPage: NextPage = () => {
     // Create a link element
     const link = document.createElement("a");
     link.href = url;
-    setIsLoading(false);
+    
     // Set the download attribute to automatically download the .docx file
     link.download = `${originalFileName.split('.').slice(0, -1).join('.')}-compared.docx`;
   
@@ -276,7 +273,8 @@ const UploadPage: NextPage = () => {
   
     // Remove the link from the body
     document.body.removeChild(link);  
-  };*/
+    setIsLoading(false);
+  };
   
   
   
