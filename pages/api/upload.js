@@ -9,8 +9,8 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-async function runThroughModel(section) {
-  
+async function runThroughModel(section, name) {
+  console.log(name);
   return new Promise(async (resolve) => {
     // setTimeout(() => {
     let keysinobj = Object.keys(section);

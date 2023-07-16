@@ -17,6 +17,9 @@ const ManualPage: NextPage = () => {
   const [processedData, setProcessedData] = useState<any[]>([]);
   const [diffResult, setDiffResult] = useState<Change[]>([]);
 
+  const [modelType, setModelType] = useState<string>("");
+
+
   useEffect(() => {
     if (processedData.length > 0) {
       const processedText = processedData.map((item) => item.processed).join(' ');
@@ -28,22 +31,55 @@ const ManualPage: NextPage = () => {
     setText(e.target.value);
   };
 
+  // var model_name = "";
+  // function modelType() {
+  // const modelType = (e: MouseEvent<HTMLDivElement, MouseEvent>) => {
+  //   // model_name = chosen;
+  //   // console.log(model_name);
+
+  //   model_name = (document.getElementById("dropdown") as HTMLInputElement).value;
+
+  // }
+  const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedValue = event.target.value;
+    if (selectedValue == "default") {
+      alert("Please select a ML model type.");
+      return;
+    }
+
+    setModelType(selectedValue);
+    // console.log(selectedValue)
+  };
+  
+  useEffect(() => {
+    console.log(modelType);
+  }, [modelType]); // specifying this as dependency array for useEffect hook. 
+  //effect will only execute when the modelType variable changes. 
+
   const onUploadText = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    // console.log(modelType);
+    const model = modelType;
 
-    if (!text) {
+    const dataIn = {
+      text,
+      model,
+    };
+
+    if (!dataIn) {
       return;
     }
     setIsLoading(true); // start loading
 
-    try {
+    try { //trying the manual version...
       const response = await fetch("/api/manual", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ text }),
+        body: JSON.stringify( dataIn ),
       });
+      console.log(modelType); //This does correctly indicate the model type selected!
 
       if (!response.ok) {
         throw new Error(`Text upload failed with status ${response.status}`);
@@ -95,32 +131,20 @@ const ManualPage: NextPage = () => {
             </h1>
 
           <div>
-            <DropdownBtn />
-              {/* <div className="relative inline-block text-left">
-                <div>
-                  <button type="button" className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" id="menu-button" aria-expanded="false" aria-haspopup="true">
-                    ML Model
-                    <svg className="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                      <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
-                    </svg>
-                  </button>
-                </div>
+            {/* <label className="block mb-2 text-sm font-medium text-gray-900 light:text-white">Select an option</label> */}
+            {/* class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" */}
+            {/* className=" border border-white-300 text-sm text-black rounded-lg focus:ring-white-500 focus:border-blue-500 block w-full p-2.5 bg-white dark:border-gray-300 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" */}
+              <select value={modelType} onChange={handleOptionChange} className="w-28 inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 select:bg-none">
+                <option value="default" selected>ML Model</option>
+                <option value="model1">Model #1</option>
+                <option value="model2">Model #2</option>
+                <option value="model3">Model #3</option>
+                <option value="model4">Model #4</option>
+              </select>
 
-
-                <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button">
-                  <div className="py-1" role="none">
-                    <a href="#" className="text-gray-700 block px-4 py-2 text-sm" role="menuitem" id="menu-item-0">Model #1</a>
-                    <a href="#" className="text-gray-700 block px-4 py-2 text-sm" role="menuitem" id="menu-item-1">Model #2</a>
-                    <a href="#" className="text-gray-700 block px-4 py-2 text-sm" role="menuitem" id="menu-item-2">Model #3</a>
-                    <form method="POST" action="#" role="none">
-                      <button type="submit" className="text-gray-700 block w-full px-4 py-2 text-left text-sm" role="menuitem" id="menu-item-3">Sign out</button>
-                    </form>
-                  </div>
-                </div>
-              </div> */}
-
+            {/* <DropdownBtn /> */}
               
-            </div>
+          </div>
 
             <form
               className="w-full p-3 border border-gray-500 border-none"
