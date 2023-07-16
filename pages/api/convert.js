@@ -24,14 +24,6 @@ export default async function handler(req, res) {
         res.status(400).json({ error: 'Both files must be uploaded.' });
         return;
       }
-      //console.log(files.file1.filepath);
-      //console.log(files.file2.filepath);
-
-      const file1Stream = fs.createReadStream(files.file1.filepath);
-      const file2Stream = fs.createReadStream(files.file2.filepath);
-
-      console.log("File 1: " + files.file1.originalFilename);
-      console.log("File 2: " + files.file2.originalFilename);
 
 
       // Upload the files to ConvertAPI
@@ -47,7 +39,7 @@ export default async function handler(req, res) {
             CompareFile: file2Url,
           }, 'docx').then(function(result) {
             // Save the result to a temporary file
-            console.log(result);
+            //console.log(result);
             if (result.response.Files && result.response.Files[0] && result.response.Files[0].FileName) {
               // Create a path for the temp file using the FileName from the result
               const tempFilePath = './temp/' + result.response.Files[0].FileName;
