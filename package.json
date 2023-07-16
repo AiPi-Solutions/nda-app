@@ -18,6 +18,7 @@
     "axios": "^1.4.0",
     "bootstrap": "^5.3.0",
     "diff": "^5.1.0",
+    "diff-match-patch": "^1.0.5",
     "docx": "^8.0.4",
     "docxtemplater": "^3.37.11",
     "eslint": "8.42.0",
@@ -44,6 +45,7 @@
   },
   "devDependencies": {
     "@types/diff": "^5.0.3",
+    "@types/diff-match-patch": "^1.0.32",
     "@types/file-saver": "^2.0.5",
     "@types/formidable": "^2.0.6",
     "@types/react-modal": "^3.16.0"

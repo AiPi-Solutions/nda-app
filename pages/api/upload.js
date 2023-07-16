@@ -11,7 +11,6 @@ const openai = new OpenAIApi(configuration);
 
 async function runThroughModel(section, name) {
   console.log(name);
-
   return new Promise(async (resolve) => {
     // setTimeout(() => {
     let keysinobj = Object.keys(section);
@@ -20,6 +19,7 @@ async function runThroughModel(section, name) {
         processed: section
       });
     } else { //DONT CALL API TOO MUCH
+      section += "hola";
       /*section += "\n\n###->";
 
       const response = await openai.createCompletion({
@@ -83,7 +83,7 @@ export default async function handler(req, res) {
           }
           console.log("done");
 
-          fs.unlinkSync(filePath);
+          //fs.unlinkSync(filePath);
 
           res.status(200).json(processedSections);
         })

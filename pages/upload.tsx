@@ -1,11 +1,13 @@
 "use client";
 import type { NextPage } from "next";
 import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
-import { Document, Packer, Paragraph } from "docx";
+import { Document, IRunOptions, Packer, Paragraph, TextRun } from "docx";
 import Link from 'next/link';
+import { diffWordsWithSpace } from 'diff';
 import RootLayout from '../components/RootLayout';
 
 import LoadingModal from "../components/LoadingModal";
+import { printCustomRoutes } from "next/dist/build/utils";
 
 const UploadPage: NextPage = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -71,7 +73,7 @@ const UploadPage: NextPage = () => {
       }
 
       const data = await response.json();
-      //console.log("🚀 ~ file: page.tsx:47 ~ onUploadFile ~ data:", data)
+      console.log("🚀 ~ file: page.tsx:47 ~ onUploadFile ~ data:", data);
       setProcessedData(data); // Store the processed data
 
       //console.log("reached back");
@@ -83,13 +85,18 @@ const UploadPage: NextPage = () => {
     }
   };
 
-  const onDownloadFile = async (e: MouseEvent<HTMLButtonElement>) => {
+  /*const onDownloadFile = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setIsLoading(true);
-
-    // Create a new paragraph for each processed section
+    
+    processedData.map((data, index) => {
+      console.log(`Data ${index + 1}:`, data.processed);
+    });
+    
+     // Create a new paragraph for each processed section
     const paragraphs = processedData.map(
       (section) => new Paragraph(section.processed)
+      
     );
 
     // Create a single section with all paragraphs
@@ -123,8 +130,163 @@ const UploadPage: NextPage = () => {
     link.click();
 
     // Remove the link from the body
-    document.body.removeChild(link);
+    document.body.removeChild(link); 
+  }; */
+  /*const onDownloadFile = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+  
+    // Create a new paragraph for each change in the diff result
+    const paragraphs = processedData.map((change, index) => {
+      const diffResult = change.diffResult;
+      const textRuns = diffResult.map((diffItem: any) => {
+        let color;
+        let strike = false;
+        let highlight;
+        
+        if (diffItem.added) {
+
+            highlight = "green"; // Set highlight color to green for additions
+            
+        } else if (diffItem.removed) {
+          
+          highlight = "red"; // Set highlight color to green for additions
+          strike = true; // Add strikethrough for removed text
+          diffItem.value += " ";
+        }
+  
+        return new TextRun({
+          text: diffItem.value,
+          color: color,
+          strike: strike,
+          highlight: highlight,
+        });
+      });
+  
+      return new Paragraph({
+        children: textRuns,
+      });
+    });
+
+    
+    // Create a single section with all paragraphs
+      const sections = [
+      {
+        properties: {},
+        children: paragraphs,
+      },
+    ];
+  
+    const doc = new Document({ sections });
+  
+    // Export the document to a .docx file
+    const packer = new Packer();
+    const blob = await Packer.toBlob(doc);
+  
+    // Create a URL for the blob
+    const url = URL.createObjectURL(blob);
+  
+    // Create a link element
+    const link = document.createElement("a");
+    link.href = url;
+    setIsLoading(false);
+    // Set the download attribute to automatically download the .docx file
+    link.download = `${originalFileName.split('.').slice(0, -1).join('.')}-modified.docx`;
+  
+    // Append the link to the body
+    document.body.appendChild(link);
+  
+    // Simulate a click on the link
+    link.click();
+  
+    // Remove the link from the body
+    document.body.removeChild(link);  
+  };*/
+  const onDownloadFile = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+  
+    // Create a new paragraph for each processed section
+    const paragraphs = processedData.map(
+      (section) => new Paragraph(section.processed)
+    );
+  
+    // Create a single section with all paragraphs
+    const sections = [
+      {
+        properties: {},
+        children: paragraphs,
+      },
+    ];
+  
+    const doc = new Document({ sections });
+  
+    // Export the document to a .docx file
+    const packer = new Packer();
+    const blob = await Packer.toBlob(doc);
+  
+    // Create a new FormData instance
+    const formData = new FormData();
+    if(!file){
+      console.log("no file");
+      return;
+    }
+    console.log("🚀 ~ file: upload.tsx:227 ~ onDownloadFile ~ file:", file);
+    
+     // Append the original and modified files to the FormData instance
+    formData.append('file1', file); // original file
+    formData.append('file2', new File([blob], `${originalFileName.split('.').slice(0, -1).join('.')}-modified.docx`)); // modified file
+  
+    // Send a POST request to the new API route
+    const response = await fetch("/api/convert", {
+      method: "POST",
+      body: formData,
+    });
+  
+    if (!response.ok) {
+      const responseBody = await response.text();
+      console.error(`File comparison failed with status ${response.status}. Response body: ${responseBody}`);
+      throw new Error(`File comparison failed with status ${response.status}`);
+    }
+  
+    // Get the result from the response
+    const result = await response.arrayBuffer();
+  
+    // Create a blob from the result
+    const blobResult = new Blob([new Uint8Array(result)], { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
+  
+    // Create a URL for the blob
+    const url = URL.createObjectURL(blobResult);
+  
+    // Create a link element
+    const link = document.createElement("a");
+    link.href = url;
+    
+    // Set the download attribute to automatically download the .docx file
+    link.download = `${originalFileName.split('.').slice(0, -1).join('.')}-compared.docx`;
+  
+    // Append the link to the body
+    document.body.appendChild(link);
+  
+    // Simulate a click on the link
+    link.click();
+  
+    // Remove the link from the body
+    document.body.removeChild(link);  
+    setIsLoading(false);
   };
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
   return (
     <RootLayout>

@@ -108,11 +108,12 @@ const ManualPage: NextPage = () => {
 
   const copyToClipboard = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-    if (!outputRef.current) {
-      return;
-    }
-    navigator.clipboard.writeText(outputRef.current.innerText).then(() => {
-      alert("Output copied to clipboard!");
+    
+    // Convert processedData to a string
+    const processedDataString = processedData.map((item) => item.processed).join(' ');
+    
+    navigator.clipboard.writeText(processedDataString).then(() => {
+      alert("Processed data copied to clipboard!");
     }, (err) => {
       console.error("Could not copy text: ", err);
     });
@@ -192,16 +193,15 @@ const ManualPage: NextPage = () => {
                 </button>
               </div>
               <div ref={outputRef} className="w-full p-3 border border-gray-500 border-dashed">
-                <div className="flex flex-col md:py-4">
+                <div className="">
                   {diffResult.map((part, index) => (
-                    <p key={index} className={`mb-4 text-black ${part.added ? 'bg-green-200' : ''} ${part.removed ? 'line-through bg-red-200' : ''}`}>
+                    <p key={index} className={`inline text-black ${part.added ? 'bg-green-200' : ''} ${part.removed ? 'line-through bg-red-200' : ''}`}>
                       {part.value}
                     </p>
                   ))}
-
-
                 </div>
               </div>
+
             </div>
           </div>
         </div>
