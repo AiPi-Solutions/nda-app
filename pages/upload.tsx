@@ -30,6 +30,7 @@ const UploadPage: NextPage = () => {
     if (e.target.files?.length) {
       setFile(e.target.files[0]);
       setFileName(e.target.files[0].name);
+      setisDownloadReady(false);
     } else {
       setFile(null);
       setFileName(null);
@@ -263,7 +264,7 @@ const UploadPage: NextPage = () => {
     link.href = url;
     
     // Set the download attribute to automatically download the .docx file
-    link.download = `${originalFileName.split('.').slice(0, -1).join('.')}-compared.docx`;
+    link.download = `${originalFileName.split('.').slice(0, -1).join('.')}-modified.docx`;
   
     // Append the link to the body
     document.body.appendChild(link);

@@ -12,15 +12,15 @@ const openai = new OpenAIApi(configuration);
 async function runThroughModel(section, name) {
   console.log(name);
   return new Promise(async (resolve) => {
-    // setTimeout(() => {
+
     let keysinobj = Object.keys(section);
     if (keysinobj.length < 90) {
       resolve({
         processed: section
       });
     } else { //DONT CALL API TOO MUCH
-      section += "hola";
-      /*section += "\n\n###->";
+      //section += "hola";
+      section += "\n\n###->";
 
       const response = await openai.createCompletion({
         model: "davinci:ft-aipi-solutions-2023-06-27-21-17-21",
@@ -31,13 +31,13 @@ async function runThroughModel(section, name) {
         stop: ['###-›', '\n\n###->', '\n###->', '###']
       });
       let content = response.data.choices[0].text;
-      console.log("🚀 ~ file: upload.js:37 ~ returnnewPromise ~ content:", content);*/
+      console.log("🚀 ~ file: upload.js:37 ~ returnnewPromise ~ content:", content);
 
       resolve({
-        processed: section//content
+        processed: content
       });
     }
-    //}, 100);
+
   });
 }
 
