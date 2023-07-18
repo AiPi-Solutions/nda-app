@@ -19,21 +19,21 @@ async function runThroughModel(section) {
         processed: section
       });
     } else { //DONT CALL API TOO MUCH
-      /*section += "END";
+      section += "\n\n###->";
 
       const response = await openai.createCompletion({
-        model: "davinci:ft-aipi-solutions-2023-05-29-19-30-48",
+        model: "davinci:ft-aipi-solutions-2023-06-27-21-17-21",
         prompt: section,
-        max_tokens: 500,
-        temperature: .8,
+        max_tokens: 900,
+        temperature: .1,
         top_p: 1,
-        stop: ['END', '\nEND']
+        stop: ['\\n#', '##', 'END','###']
       });
       let content = response.data.choices[0].text;
-      console.log("🚀 ~ file: upload.js:37 ~ returnnewPromise ~ content:", content)*/
+      console.log("🚀 ~ file: upload.js:37 ~ returnnewPromise ~ content:", content)
 
       resolve({
-        processed: section//content
+        processed: content
       });
     }
     //}, 100);
