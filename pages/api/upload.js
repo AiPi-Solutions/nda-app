@@ -23,12 +23,13 @@ async function runThroughModel(section, name) {
       section += "\n\n###->";
 
       const response = await openai.createCompletion({
+        // model: "davinci:ft-aipi-solutions-2023-07-04-20-55-59",
         model: "davinci:ft-aipi-solutions-2023-06-27-21-17-21",
         prompt: section,
-        max_tokens: 500,
-        temperature: .8,
+        max_tokens: 900,
+        temperature: .2,
         top_p: 1,
-        stop: ['###-›', '\n\n###->', '\n###->', '###']
+        stop: ['\\n#', '##', 'END','###']
       });
       let content = response.data.choices[0].text;
       console.log("🚀 ~ file: upload.js:37 ~ returnnewPromise ~ content:", content);
