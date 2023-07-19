@@ -14,18 +14,19 @@ async function runThroughModel(section) {
   return new Promise(async (resolve) => {
     // setTimeout(() => {
     let keysinobj = Object.keys(section);
-    if (keysinobj.length < 40) {
+    if (keysinobj.length < 90) {
       resolve({
         processed: section
       });
     } else { //DONT CALL API TOO MUCH
-      section += "\n\n###->";
+      section += " ###->";
 
       const response = await openai.createCompletion({
-        model: "davinci:ft-aipi-solutions-2023-06-27-21-17-21",
+        // model: "davinci:ft-aipi-solutions-2023-06-27-21-17-21",
+        model: "davinci:ft-aipi-solutions-2023-07-19-07-37-05",
         prompt: section,
         max_tokens: 900,
-        temperature: .1,
+        temperature: .2,
         top_p: 1,
         stop: ['\\n#', '##', 'END','###']
       });
