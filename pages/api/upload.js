@@ -23,7 +23,7 @@ async function runThroughModel(section) {
 
       const response = await openai.createCompletion({
         // model: "davinci:ft-aipi-solutions-2023-06-27-21-17-21",
-        model: "davinci:ft-aipi-solutions-2023-07-19-07-37-05",
+        model: "davinci:ft-aipi-solutions-2023-07-19-18-26-22",
         prompt: section,
         max_tokens: 900,
         temperature: .2,
