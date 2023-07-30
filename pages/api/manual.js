@@ -17,7 +17,8 @@ async function runThroughModel(section, model) {
         section += "\n\n###->";
 
         const response = await openai.createCompletion({
-          model: "davinci:ft-aipi-solutions-2023-06-27-21-17-21",
+          // model: "davinci:ft-aipi-solutions-2023-06-27-21-17-21",
+          model: "ada:ft-aipi-solutions-2023-07-22-00-25-57",
           prompt: section,
           max_tokens: 500,
           temperature: .8,

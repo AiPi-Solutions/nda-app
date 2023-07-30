@@ -20,14 +20,17 @@ async function runThroughModel(section, name) {
       });
     } else { //DONT CALL API TOO MUCH
       //section += "hola";
-      section += "\n\n###->";
+      section += " ###->";
 
       const response = await openai.createCompletion({
-        // model: "davinci:ft-aipi-solutions-2023-07-04-20-55-59",
+        // model : "davinci:ft-aipi-solutions-2023-05-29-19-30-48",
         model: "davinci:ft-aipi-solutions-2023-06-27-21-17-21",
+        // model: "davinci:ft-aipi-solutions-2023-07-04-20-55-59",
+        // model: "davinci:ft-aipi-solutions-2023-07-23-10-54-36",
+        // model: "ada:ft-aipi-solutions-2023-07-22-00-25-57",
         prompt: section,
         max_tokens: 900,
-        temperature: .2,
+        temperature: 0.2,
         top_p: 1,
         stop: ['\\n#', '##', 'END','###']
       });
